@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --charcoal:#1A1A1A;
+  --saffron:#E67E22;
+  --saffron-light:#F39C12;
+  --cream:#F9F7F2;
+  --cream-dark:#EDE9E0;
+  --text-light:#8C8677;
+  --border:#2E2E2E;
+}
+html{scroll-behavior:smooth}
+body{background:var(--charcoal);color:var(--cream);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+h1,h2,h3,.serif{font-family:'Playfair Display',serif}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:100;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(26,26,26,0.98) 0%,rgba(26,26,26,0) 100%);transition:background 0.3s}
+nav.scrolled{background:rgba(26,26,26,0.98);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--cream);letter-spacing:0.02em}
+.nav-logo span{color:var(--saffron)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--cream);text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;opacity:0.8;transition:opacity 0.2s,color 0.2s}
+.nav-links a:hover{opacity:1;color:var(--saffron)}
+.nav-cta{background:var(--saffron);color:#fff;border:none;padding:0.65rem 1.4rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s}
+.nav-cta:hover{background:var(--saffron-light)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hamburger span{display:block;width:24px;height:2px;background:var(--cream);transition:0.3s}
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+}
+
+/* MOBILE MENU */
+.mobile-menu{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--charcoal);z-index:200;flex-direction:column;justify-content:center;align-items:center;gap:2rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-family:'Playfair Display',serif;font-size:2rem;color:var(--cream);text-decoration:none;opacity:0.85}
+.mobile-menu-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--cream);font-size:2rem;cursor:pointer}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:6rem 2rem 4rem}
+.hero-bg{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 70% 40%, rgba(230,126,34,0.12) 0%, transparent 60%),
+  radial-gradient(ellipse at 20% 70%, rgba(230,126,34,0.06) 0%, transparent 50%),
+  var(--charcoal);
+}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:860px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:0.75rem;font-size:0.75rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--saffron);margin-bottom:1.5rem}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:32px;height:1px;background:var(--saffron);opacity:0.6}
+.hero h1{font-size:clamp(2.8rem,7vw,5.5rem);line-height:1.05;font-weight:900;margin-bottom:1.5rem;color:var(--cream)}
+.hero h1 em{color:var(--saffron);font-style:italic}
+.hero-sub{font-size:clamp(1rem,2vw,1.2rem);color:var(--text-light);max-width:480px;margin:0 auto 2.5rem;line-height:1.7;font-weight:300}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--saffron);color:#fff;border:none;padding:0.9rem 2.2rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-block}
+.btn-primary:hover{background:var(--saffron-light);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--cream);border:1px solid rgba(249,247,242,0.3);padding:0.9rem 2.2rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-block}
+.btn-outline:hover{border-color:var(--saffron);color:var(--saffron)}
+.hero-cards{display:flex;gap:1.5rem;justify-content:center;margin-top:3rem;flex-wrap:wrap}
+.hero-card{background:rgba(249,247,242,0.04);border:1px solid rgba(249,247,242,0.08);border-radius:4px;padding:1.2rem 1.5rem;text-align:left;min-width:160px}
+.hero-card-img{width:100%;aspect-ratio:4/3;border-radius:2px;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:center;font-size:2.5rem;overflow:hidden}
+.hero-card-img.tandoori{background:linear-gradient(135deg,#3D1A0A 0%,#8B2E0A 50%,#C04A15 100%)}
+.hero-card-img.biryani{background:linear-gradient(135deg,#2A1A05 0%,#7A4A10 50%,#C47A20 100%)}
+.hero-card-label{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--saffron);font-weight:600;margin-bottom:0.25rem}
+.hero-card-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream)}
+.scroll-indicator{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;opacity:0.5}
+.scroll-indicator span{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream)}
+.scroll-line{width:1px;height:40px;background:linear-gradient(180deg,var(--cream),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+
+/* SECTION BASE */
+section{padding:6rem 3rem}
+@media(max-width:768px){section{padding:4rem 1.5rem}}
+.section-eyebrow{font-size:0.72rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--saffron);margin-bottom:0.75rem}
+.section-title{font-size:clamp(2rem,4vw,3rem);font-weight:700;color:var(--cream);line-height:1.1;margin-bottom:1rem}
+.section-sub{color:var(--text-light);font-size:1rem;line-height:1.7;max-width:520px}
+.divider{width:48px;height:2px;background:var(--saffron);margin:1.5rem 0}
+
+/* BRANDS TOGGLE */
+.brands-section{background:linear-gradient(180deg,var(--charcoal) 0%,#141414 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.brands-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:900px;margin:0 auto;border:1px solid var(--border)}
+.brand-card{padding:3rem;position:relative;overflow:hidden;cursor:pointer;transition:background 0.3s}
+.brand-card:first-child{border-right:1px solid var(--border)}
+.brand-card.active{background:rgba(230,126,34,0.06)}
+.brand-badge{display:inline-block;font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;padding:0.3rem 0.7rem;border:1px solid;margin-bottom:1.25rem;border-radius:2px}
+.brand-badge.dining{color:var(--saffron);border-color:var(--saffron)}
+.brand-badge.street{color:#9BD4B8;border-color:#9BD4B8}
+.brand-card h3{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--cream);margin-bottom:0.75rem}
+.brand-card p{font-size:0.9rem;color:var(--text-light);line-height:1.7}
+.brand-card-detail{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:0.8rem;color:var(--text-light)}
+.brand-card-detail strong{color:var(--cream);display:block;margin-bottom:0.25rem;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase}
+@media(max-width:600px){.brands-grid{grid-template-columns:1fr}.brand-card:first-child{border-right:none;border-bottom:1px solid var(--border)}}
+
+/* MENU */
+.menu-section{background:#141414}
+.menu-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;flex-wrap:wrap;gap:1rem}
+.menu-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:2px;overflow:hidden;flex-wrap:wrap}
+.menu-tab{background:transparent;border:none;border-right:1px solid var(--border);color:var(--text-light);padding:0.65rem 1.3rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.menu-tab:last-child{border-right:none}
+.menu-tab.active{background:var(--saffron);color:#fff}
+.menu-tab:hover:not(.active){color:var(--cream);background:rgba(249,247,242,0.04)}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.menu-item{background:rgba(249,247,242,0.03);border:1px solid var(--border);border-radius:4px;padding:1.5rem;position:relative;transition:border-color 0.25s,background 0.25s;cursor:default}
+.menu-item:hover{border-color:rgba(230,126,34,0.4);background:rgba(230,126,34,0.04)}
+.menu-item-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:0.5rem}
+.menu-item-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);line-height:1.3}
+.menu-item-price{font-size:1rem;font-weight:600;color:var(--saffron);white-space:nowrap}
+.menu-item-desc{font-size:0.83rem;color:var(--text-light);line-height:1.6;margin-bottom:1rem}
+.menu-item-footer{display:flex;justify-content:space-between;align-items:center}
+.spice-level{display:flex;gap:3px}
+.spice-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.spice-dot.active{background:var(--saffron)}
+.menu-tag{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;padding:0.2rem 0.5rem;border-radius:2px}
+.tag-vegan{background:rgba(155,212,184,0.12);color:#9BD4B8;border:1px solid rgba(155,212,184,0.2)}
+.tag-popular{background:rgba(230,126,34,0.12);color:var(--saffron);border:1px solid rgba(230,126,34,0.2)}
+.tag-chef{background:rgba(249,247,242,0.06);color:var(--cream);border:1px solid rgba(249,247,242,0.1)}
+
+/* ABOUT */
+.about-section{background:var(--charcoal)}
+.about-inner{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;max-width:1100px;margin:0 auto}
+@media(max-width:800px){.about-inner{grid-template-columns:1fr;gap:3rem}}
+.about-image-block{position:relative}
+.about-image-main{width:100%;aspect-ratio:4/5;background:linear-gradient(135deg,#1A0A05 0%,#3D1A08 40%,#7A3A10 80%,#C06020 100%);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden}
+.about-image-main::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(230,126,34,0.1),transparent 60%)}
+.about-image-accent{position:absolute;bottom:-1.5rem;right:-1.5rem;width:55%;aspect-ratio:1;background:var(--saffron);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.about-quote{font-family:'Playfair Display',serif;font-size:1.5rem;font-style:italic;color:var(--cream);line-height:1.5;margin:1.5rem 0;opacity:0.9}
+.about-stats{display:flex;gap:2rem;margin-top:2rem;flex-wrap:wrap}
+.about-stat{text-align:center}
+.about-stat-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--saffron);line-height:1}
+.about-stat-label{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);margin-top:0.3rem}
+.team-pills{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1.5rem}
+.team-pill{background:rgba(249,247,242,0.06);border:1px solid var(--border);border-radius:50px;padding:0.4rem 1rem;font-size:0.82rem;color:var(--cream);display:flex;align-items:center;gap:0.4rem}
+.team-pill-dot{width:8px;height:8px;border-radius:50%;background:var(--saffron);flex-shrink:0}
+
+/* REVIEWS */
+.reviews-section{background:#0F0F0F;overflow:hidden}
+.reviews-track{display:flex;gap:1.5rem;animation:slide 30s linear infinite;width:max-content;margin-top:3rem}
+.reviews-track:hover{animation-play-state:paused}
+@keyframes slide{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.review-card{background:rgba(249,247,242,0.04);border:1px solid var(--border);border-radius:4px;padding:1.75rem;width:320px;flex-shrink:0}
+.review-stars{color:var(--saffron);font-size:0.85rem;letter-spacing:0.1em;margin-bottom:0.75rem}
+.review-text{font-size:0.88rem;color:var(--text-light);line-height:1.7;margin-bottom:1rem;font-style:italic}
+.review-author{font-size:0.8rem;font-weight:600;color:var(--cream);letter-spacing:0.05em}
+
+/* RESERVATION */
+.reservation-section{background:var(--charcoal)}
+.reservation-inner{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;max-width:1100px;margin:0 auto}
+@media(max-width:800px){.reservation-inner{grid-template-columns:1fr;gap:3rem}}
+.res-form{background:rgba(249,247,242,0.03);border:1px solid var(--border);border-radius:4px;padding:2.5rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:500px){.form-row{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem}
+.form-group label{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);font-weight:600}
+.form-group input,.form-group select,.form-group textarea{background:rgba(249,247,242,0.04);border:1px solid var(--border);border-radius:2px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.9rem;padding:0.75rem 1rem;transition:border-color 0.2s;outline:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--saffron)}
+.form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238C8677' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+.form-group select option{background:#1A1A1A}
+.info-block{margin-bottom:2.5rem}
+.info-item{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem}
+.info-icon{width:36px;height:36px;background:rgba(230,126,34,0.12);border:1px solid rgba(230,126,34,0.2);border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.9rem}
+.info-item-label{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);font-weight:600;margin-bottom:0.2rem}
+.info-item-value{font-size:0.92rem;color:var(--cream);line-height:1.5}
+.catering-block{background:rgba(230,126,34,0.06);border:1px solid rgba(230,126,34,0.2);border-radius:4px;padding:1.5rem;margin-top:2rem}
+.catering-block h4{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--cream);margin-bottom:0.5rem}
+.catering-block p{font-size:0.85rem;color:var(--text-light);line-height:1.6}
+
+/* FOOTER */
+footer{background:#0A0A0A;border-top:1px solid var(--border);padding:4rem 3rem 2rem}
+@media(max-width:768px){footer{padding:3rem 1.5rem 2rem}}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:4rem;margin-bottom:3rem}
+@media(max-width:700px){.footer-grid{grid-template-columns:1fr;gap:2rem}}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--cream);margin-bottom:0.75rem}
+.footer-brand span{color:var(--saffron)}
+.footer-desc{font-size:0.85rem;color:var(--text-light);line-height:1.7;max-width:280px;margin-bottom:1.5rem}
+.social-links{display:flex;gap:0.75rem}
+.social-link{width:36px;height:36px;border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;color:var(--text-light);text-decoration:none;font-size:0.75rem;font-weight:700;transition:all 0.2s}
+.social-link:hover{border-color:var(--saffron);color:var(--saffron)}
+.footer-col h5{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--saffron);font-weight:700;margin-bottom:1.25rem}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:0.6rem}
+.footer-links a{color:var(--text-light);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+.footer-links a:hover{color:var(--cream)}
+.hours-table{font-size:0.83rem}
+.hours-row{display:flex;justify-content:space-between;gap:1rem;padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.hours-row:last-child{border-bottom:none}
+.hours-day{color:var(--text-light)}
+.hours-time{color:var(--cream);font-weight:500}
+.hours-time.closed{color:#555}
+.footer-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-bottom p{font-size:0.78rem;color:#555}
+.footer-bottom a{color:var(--saffron);text-decoration:none}
+
+/* FLOATING BUTTONS */
+.float-buttons{position:fixed;bottom:2rem;right:2rem;display:flex;flex-direction:column;gap:0.75rem;z-index:90}
+.float-btn{width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 4px 20px rgba(0,0,0,0.4);transition:transform 0.2s;text-decoration:none}
+.float-btn:hover{transform:scale(1.1)}
+.float-btn.whatsapp{background:#25D366}
+.float-btn.call{background:var(--saffron)}
+.float-label{position:absolute;right:64px;background:rgba(26,26,26,0.95);color:var(--cream);font-size:0.75rem;padding:0.3rem 0.6rem;border-radius:2px;white-space:nowrap;border:1px solid var(--border);opacity:0;transition:opacity 0.2s;pointer-events:none}
+.float-btn:hover .float-label{opacity:1}
+.float-btn-wrap{position:relative;display:flex;align-items:center}
+
+/* ANIMATIONS */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.stagger-1{transition-delay:0.1s}
+.stagger-2{transition-delay:0.2s}
+.stagger-3{transition-delay:0.3s}
+.stagger-4{transition-delay:0.4s}
+
+/* MEDIA QUERIES */
+@media(max-width:480px){
+  .hero h1{font-size:2.2rem}
+  .hero-cards{display:none}
+  .menu-tab{padding:0.5rem 0.9rem;font-size:0.7rem}
+  .res-form{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Indian <span>Junction</span></div>
+  <ul class="nav-links">
+    <li><a href="#brands">Our Brands</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#reservation">Reservations</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('reservation').scrollIntoView({behavior:'smooth'})">Book a Table</button>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="menuClose">✕</button>
+  <a href="#brands" onclick="closeMobile()">Our Brands</a>
+  <a href="#menu" onclick="closeMobile()">Menu</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#reservation" onclick="closeMobile()">Reservations</a>
+  <a href="https://widget.thefork.com/02cb0827-f0bd-4db8-a811-285691c21ceb" target="_blank" style="color:var(--saffron)">Book a Table</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow fade-in">Uithoorn · Since 2022</div>
+    <h1 class="fade-in stagger-1">Where <em>Tradition</em><br>Meets the Junction.</h1>
+    <p class="hero-sub fade-in stagger-2">Authentic Indian flavors in the heart of Uithoorn. Street food soul. Fine dining heart.</p>
+    <div class="hero-actions fade-in stagger-3">
+      <a href="https://widget.thefork.com/02cb0827-f0bd-4db8-a811-285691c21ceb" target="_blank" class="btn-primary">Reserve a Table</a>
+      <a href="https://indianjunction57.foodticket.nl/foodticket/cgi/bestel.cgi" target="_blank" class="btn-outline">Order Online</a>
+    </div>
+    <div class="hero-cards fade-in stagger-4">
+      <div class="hero-card">
+        <div class="hero-card-img tandoori">🔥</div>
+        <div class="hero-card-label">Tandoor Special</div>
+        <div class="hero-card-name">Tandoori Chicken</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-img biryani">🍛</div>
+        <div class="hero-card-label">House Signature</div>
+        <div class="hero-card-name">Darbari Biryani</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- BRANDS TOGGLE -->
+<section class="brands-section" id="brands">
+  <div style="text-align:center;margin-bottom:3rem" class="fade-in">
+    <p class="section-eyebrow">The Family</p>
+    <h2 class="section-title" style="text-align:center">Two Brands. One Soul.</h2>
+    <p class="section-sub" style="margin:0 auto;text-align:center">From sit-down feasts to grab-and-go street bites — we have your craving covered.</p>
+  </div>
+  <div class="brands-grid fade-in">
+    <div class="brand-card active" id="brand1">
+      <span class="brand-badge dining">Fine Dining</span>
+      <h3>Indian Junction</h3>
+      <p>Our flagship restaurant, where every meal is a celebration. Sit down, slow down, and let our kitchen take you on a journey through India's rich culinary heritage — from tandoor-kissed kebabs to slow-simmered curries.</p>
+      <div class="brand-card-detail">
+        <strong>Address</strong>
+        Cort van Lindenplein 5, 1421 NJ Uithoorn
+      </div>
+      <div class="brand-card-detail" style="margin-top:0.75rem">
+        <strong>Hours (Tue–Sun)</strong>
+        16:00 – 22:00 · Monday Closed
+      </div>
+      <div class="brand-card-detail" style="margin-top:0.75rem">
+        <strong>Phone</strong>
+        +31 297 297 015
+      </div>
+    </div>
+    <div class="brand-card" id="brand2">
+      <span class="brand-badge street">Street Food</span>
+      <h3>Indian Quick Bites</h3>
+      <p>Born from Kolkata's alleyways and Mumbai's chaat stalls, Indian Quick Bites brings the electric energy of Indian street food to Uithoorn. Fast, bold, and unforgettable — every bite is a thrill.</p>
+      <div class="brand-card-detail">
+        <strong>Address</strong>
+        Cort van der Lindenplein 5, 1421 NJ Uithoorn
+      </div>
+      <div class="brand-card-detail" style="margin-top:0.75rem">
+        <strong>Hours</strong>
+        Wed–Sun: 16:00 – 21:00 · Mon–Tue Closed
+      </div>
+      <div class="brand-card-detail" style="margin-top:0.75rem">
+        <strong>Phone</strong>
+        +31 297 785 757
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="menu-header fade-in">
+    <div>
+      <p class="section-eyebrow">Curated Highlights</p>
+      <h2 class="section-title" style="margin-bottom:0">Our Menu</h2>
+    </div>
+    <div class="menu-tabs" id="menuTabs">
+      <button class="menu-tab active" data-tab="starters">Starters</button>
+      <button class="menu-tab" data-tab="mains">Main Course</button>
+      <button class="menu-tab" data-tab="street">Street Food</button>
+      <button class="menu-tab" data-tab="vegan">Vegan</button>
+    </div>
+  </div>
+  <div class="menu-grid fade-in" id="menuGrid"></div>
+  <div style="text-align:center;margin-top:3rem" class="fade-in">
+    <a href="https://indianjunction57.foodticket.nl/foodticket/cgi/bestel.cgi" target="_blank" class="btn-outline">View Full Menu & Order</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div class="about-image-block fade-in">
+      <div class="about-image-main">🫙</div>
+      <div class="about-image-accent">🌿</div>
+    </div>
+    <div class="fade-in stagger-1">
+      <p class="section-eyebrow">Our Story</p>
+      <h2 class="section-title">Indian Spice.<br>Dutch Heart.</h2>
+      <div class="divider"></div>
+      <p class="about-quote">"A culinary haven where cultures unite, spices dance, and every dish is a tribute to India."</p>
+      <p style="color:var(--text-light);font-size:0.9rem;line-height:1.8;margin-bottom:1.5rem">Founded by <strong style="color:var(--cream)">Priya, Aman, and Simran</strong>, Indian Junction was born from a shared dream: to bring the warmth of Indian hospitality to the Netherlands. Embracing Dutch life while staying rooted in tradition, they crafted a space where every meal is made with care, using time-honored recipes and the freshest ingredients.</p>
+      <p style="color:var(--text-light);font-size:0.9rem;line-height:1.8;margin-bottom:1.5rem">As proud sponsors of a local Uithoorn hockey team, their warmth extends well beyond the kitchen. Celebrated by <em style="color:var(--cream)">de Volkskrant</em> and critic Hiske Versprille, the restaurant has become a beloved destination for Indian cuisine in the region.</p>
+      <div class="team-pills">
+        <div class="team-pill"><div class="team-pill-dot"></div>Priya · Co-Founder</div>
+        <div class="team-pill"><div class="team-pill-dot"></div>Aman · Co-Founder</div>
+        <div class="team-pill"><div class="team-pill-dot"></div>Simran · Co-Founder</div>
+      </div>
+      <div class="about-stats">
+        <div class="about-stat">
+          <div class="about-stat-num">2+</div>
+          <div class="about-stat-label">Brands</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-num">100%</div>
+          <div class="about-stat-label">Homemade</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-num">5★</div>
+          <div class="about-stat-label">Rated</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-num">🌱</div>
+          <div class="about-stat-label">Sustainable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section" style="padding:5rem 0">
+  <div style="padding:0 3rem;margin-bottom:0.5rem" class="fade-in">
+    <p class="section-eyebrow">Guest Reviews</p>
+    <h2 class="section-title">What Our Guests Say</h2>
+  </div>
+  <div class="reviews-track" id="reviewsTrack"></div>
+</section>
+
+<!-- RESERVATION -->
+<section class="reservation-section" id="reservation">
+  <div class="reservation-inner">
+    <div class="fade-in">
+      <p class="section-eyebrow">Reserve Your Spot</p>
+      <h2 class="section-title">Come Dine<br>With Us</h2>
+      <div class="divider"></div>
+      <div class="info-block">
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div>
+            <div class="info-item-label">Address</div>
+            <div class="info-item-value">Cort van Lindenplein 5<br>1421 NJ Uithoorn, Netherlands</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">🕐</div>
+          <div>
+            <div class="info-item-label">Opening Hours</div>
+            <div class="info-item-value">Tue – Sun: 16:00 – 22:00<br><span style="color:var(--text-light);font-size:0.85rem">Monday: Closed</span></div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">📞</div>
+          <div>
+            <div class="info-item-label">Phone & WhatsApp</div>
+            <div class="info-item-value">+31 297 297 015</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">✉️</div>
+          <div>
+            <div class="info-item-label">Email</div>
+            <div class="info-item-value">indianjunction803@gmail.com</div>
+          </div>
+        </div>
+      </div>
+      <div class="catering-block">
+        <h4>🍽️ Catering & Events</h4>
+        <p>From corporate lunches to wedding banquets — we transform any occasion into an unforgettable Indian feast. Birthdays, socials, weddings, and more.</p>
+        <a href="mailto:indianjunction803@gmail.com" style="display:inline-block;margin-top:1rem;font-size:0.8rem;color:var(--saffron);letter-spacing:0.1em;text-transform:uppercase;font-weight:600;text-decoration:none">Enquire About Catering →</a>
+      </div>
+    </div>
+    <div class="res-form fade-in stagger-1">
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--cream);margin-bottom:1.75rem">Make a Reservation</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Priya"/>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Singh"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="+31 6 ..."/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date"/>
+        </div>
+        <div class="form-group">
+          <label>Time</label>
+          <select>
+            <option>16:00</option><option>16:30</option><option>17:00</option>
+            <option>17:30</option><option>18:00</option><option>18:30</option>
+            <option>19:00</option><option>19:30</option><option>20:00</option>
+            <option>20:30</option><option>21:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Number of Guests</label>
+        <select>
+          <option>1 guest</option><option>2 guests</option><option>3 guests</option>
+          <option>4 guests</option><option>5 guests</option><option>6 guests</option>
+          <option>7+ guests — we'll call you</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Special Requests</label>
+        <textarea rows="3" placeholder="Allergies, celebrations, dietary requirements..." style="resize:vertical"></textarea>
+      </div>
+      <button class="btn-primary" style="width:100%;padding:1rem;font-size:0.85rem" onclick="handleReservation()">Confirm Reservation</button>
+      <p style="font-size:0.75rem;color:var(--text-light);margin-top:1rem;text-align:center">Or book instantly via <a href="https://widget.thefork.com/02cb0827-f0bd-4db8-a811-285691c21ceb" target="_blank" style="color:var(--saffron)">TheFork</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">Indian <span>Junction</span></div>
+      <p class="footer-desc">Authentic Indian street food cuisine in the heart of Uithoorn. Family-owned, community-loved, reviewed by de Volkskrant.</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/people/Indian-Junction/100084753805951/" target="_blank" class="social-link">FB</a>
+        <a href="https://www.instagram.com/indian.junction_nl" target="_blank" class="social-link">IG</a>
+        <a href="https://api.whatsapp.com/send?phone=31297297015" target="_blank" class="social-link">WA</a>
+      </div>
+    </div>
+    <div>
+      <h5>Navigate</h5>
+      <ul class="footer-links">
+        <li><a href="#brands">Our Brands</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#reservation">Reservations</a></li>
+        <li><a href="https://indianjunction57.foodticket.nl/foodticket/cgi/bestel.cgi" target="_blank">Order Online</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Opening Hours</h5>
+      <div class="hours-table">
+        <div class="hours-row"><span class="hours-day">Monday</span><span class="hours-time closed">Closed</span></div>
+        <div class="hours-row"><span class="hours-day">Tuesday</span><span class="hours-time">16:00 – 22:00</span></div>
+        <div class="hours-row"><span class="hours-day">Wednesday</span><span class="hours-time">16:00 – 22:00</span></div>
+        <div class="hours-row"><span class="hours-day">Thursday</span><span class="hours-time">16:00 – 22:00</span></div>
+        <div class="hours-row"><span class="hours-day">Friday</span><span class="hours-time">16:00 – 22:00</span></div>
+        <div class="hours-row"><span class="hours-day">Saturday</span><span class="hours-time">16:00 – 22:00</span></div>
+        <div class="hours-row"><span class="hours-day">Sunday</span><span class="hours-time">16:00 – 22:00</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Indian Junction · Cort van Lindenplein 5, 1421 NJ Uithoorn · <a href="tel:+31297297015">+31 297 297 015</a></p>
+    <p style="color:#444">Designed with ♥ for authentic Indian cuisine</p>
+  </div>
+</footer>
+
+<!-- FLOATING BUTTONS -->
+<div class="float-buttons">
+  <div class="float-btn-wrap">
+    <span class="float-label">WhatsApp Us</span>
+    <a href="https://api.whatsapp.com/send?phone=31297297015&text=Hello%20Indian%20Junction..%20I%20am%20interested%20to%20explore%20your%20food" target="_blank" class="float-btn whatsapp">💬</a>
+  </div>
+  <div class="float-btn-wrap">
+    <span class="float-label">Call Us</span>
+    <a href="tel:+31297297015" class="float-btn call">📞</a>
+  </div>
+</div>
+
+<script>
+const menuData = {
+  starters: [
+    {name:'Chicken Tikka',price:'€11.95',desc:'Tender chicken marinated in yoghurt and spices, char-grilled in the tandoor.',spice:2,tag:'popular'},
+    {name:'Howrah ki Pani Puri',price:'€7.95',desc:'Kolkata-style hollow puri spheres filled with tangy tamarind water, potato and chickpeas.',spice:2,tag:'street'},
+    {name:'Paneer Tikka',price:'€10.95',desc:'Cottage cheese marinated in spiced yoghurt and grilled to perfection in the tandoor.',spice:1,tag:'vegan'},
+    {name:'Palak Pakoda',price:'€8.50',desc:'Crispy spinach fritters seasoned with carom seeds and fresh coriander chutney.',spice:1,tag:'vegan'},
+    {name:'Soya Chaap',price:'€9.50',desc:'Marinated soya chaap grilled with smoky spices — surprisingly meaty without the meat.',spice:2,tag:'vegan'},
+    {name:'Chicken Besh Kimti',price:'€12.50',desc:'A rich, indulgent starter of braised chicken in a deep spiced gravy — the chef\'s pride.',spice:3,tag:'chef'},
+  ],
+  mains: [
+    {name:'Darbari Dal Makhani',price:'€13.95',desc:'Black lentils slow-cooked overnight in butter and cream with a secret blend of Darbari spices.',spice:1,tag:'popular'},
+    {name:'Chicken Balti',price:'€15.95',desc:'Freshly cooked in a steel balti with vibrant spices and fragrant fresh herbs.',spice:2,tag:'popular'},
+    {name:'Chicken Rara',price:'€16.50',desc:'A robust preparation with minced and whole chicken pieces in a thick, aromatic masala.',spice:3,tag:'chef'},
+    {name:'Lamb Rogan Josh',price:'€17.95',desc:'Slow-cooked Kashmiri lamb with fennel, dried ginger and whole spices.',spice:2,tag:'chef'},
+    {name:'Darbari Biryani',price:'€16.95',desc:'Fragrant basmati rice layered with slow-cooked meat and fried onions, served with raita.',spice:2,tag:'popular'},
+    {name:'Aloo Methi Masala',price:'€12.50',desc:'Potatoes and fresh fenugreek leaves cooked in a dry, subtly spiced masala.',spice:1,tag:'vegan'},
+  ],
+  street: [
+    {name:'Howrah ki Pani Puri',price:'€7.95',desc:'Kolkata-style street food at its purest — tangy, spicy, ice-cold flavoured water.',spice:2,tag:'popular'},
+    {name:'Masala Chai',price:'€3.50',desc:'Warming Indian spiced tea brewed with ginger, cardamom and cinnamon.',spice:0,tag:'popular'},
+    {name:'Samosa Chaat',price:'€8.50',desc:'Crispy samosas smashed and topped with chickpea curry, chutneys and sev.',spice:2,tag:'street'},
+    {name:'Kathi Roll',price:'€9.95',desc:'Flaky paratha rolled with spiced filling — choose chicken, paneer or vegetables.',spice:2,tag:'popular'},
+    {name:'Gulab Jamun',price:'€5.50',desc:'Soft milk-solid dumplings soaked in rose-flavoured sugar syrup. The ultimate sweet finish.',spice:0,tag:'popular'},
+    {name:'Rasmalai',price:'€5.95',desc:'Chilled cottage cheese patties in sweetened, cardamom-spiced milk cream.',spice:0,tag:'chef'},
+  ],
+  vegan: [
+    {name:'Darbari Dal Makhani (V)',price:'€13.95',desc:'Plant-based version of our signature dal — same depth, zero dairy, full satisfaction.',spice:1,tag:'vegan'},
+    {name:'Paneer Tikka',price:'€10.95',desc:'Marinated cottage cheese grilled in the tandoor. Can be made fully vegan on request.',spice:1,tag:'vegan'},
+    {name:'Soya Chaap',price:'€9.50',desc:'Smoky, spiced soya chaap that satisfies any craving for rich, meaty texture.',spice:2,tag:'vegan'},
+    {name:'Palak Pakoda',price:'€8.50',desc:'Crispy spinach fritters — 100% plant-based, served with mint coriander chutney.',spice:1,tag:'vegan'},
+    {name:'Aloo Methi Masala',price:'€12.50',desc:'Fenugreek-spiced potatoes cooked dry. Comforting and deeply flavourful.',spice:1,tag:'vegan'},
+    {name:'Chana Masala',price:'€12.95',desc:'Hearty chickpeas braised in a tangy, ginger-heavy tomato gravy.',spice:2,tag:'vegan'},
+  ]
+};
+
+const tagLabels = {popular:'⭐ Popular',chef:'Chef\'s Pick',vegan:'🌱 Vegan',street:'🛺 Street'},
+tagClasses = {popular:'tag-popular',chef:'tag-chef',vegan:'tag-vegan',street:'tag-popular'};
+
+const reviews = [
+  {stars:'★★★★★',text:'Definitely the best restaurant in the area. The owners and staff give a personal touch with lot of warmth and courtesy. Chicken balti was the recommendation — now it has become my favourite dish across Netherlands.',author:'Daksh Kalra'},
+  {stars:'★★★★★',text:'Very impressed by the waitress, who was working alone in a completely booked restaurant. Yet she kept smiling. The food was also very good! Lots of vegan and vegetarian options.',author:'Demi Grifioen'},
+  {stars:'★★★★★',text:'Very nice and warm experience. I recommend the Chicken Rara and Garlic Naans. Best Gulab Jamun and Rasmalai till today in the Netherlands.',author:'Sudipa Bera'},
+  {stars:'★★★★★',text:'The first Indian restaurant I\'ve been to in Europe that had coriander chutney which I missed dearly after having been to Mumbai.',author:'Ruchika Kumar'},
+  {stars:'★★★★★',text:'Delicious food, smiling service, and the atmosphere of both spots offer an excellent restaurant experience! If you happen to be near Amsterdam, definitely try out one of the dishes.',author:'Julia Wiergowska'},
+  {stars:'★★★★★',text:'The food was amazing!!! If I lived here I\'d come once a week. It was tasty, cozy, nice people. Loved it!',author:'Laura Tanis'},
+];
+
+function renderMenu(tab){
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = menuData[tab].map(item=>`
+    <div class="menu-item">
+      <div class="menu-item-header">
+        <div class="menu-item-name">${item.name}</div>
+        <div class="menu-item-price">${item.price}</div>
+      </div>
+      <div class="menu-item-desc">${item.desc}</div>
+      <div class="menu-item-footer">
+        <div class="spice-level">
+          ${[0,1,2,3].map(i=>`<div class="spice-dot${i<=item.spice&&item.spice>0?' active':''}"></div>`).join('')}
+        </div>
+        <span class="menu-tag ${tagClasses[item.tag]}">${tagLabels[item.tag]}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderReviews(){
+  const track = document.getElementById('reviewsTrack');
+  const doubled = [...reviews,...reviews];
+  track.innerHTML = doubled.map(r=>`
+    <div class="review-card">
+      <div class="review-stars">${r.stars}</div>
+      <p class="review-text">"${r.text}"</p>
+      <div class="review-author">— ${r.author}</div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('menuTabs').addEventListener('click',e=>{
+  if(e.target.classList.contains('menu-tab')){
+    document.querySelectorAll('.menu-tab').forEach(t=>t.classList.remove('active'));
+    e.target.classList.add('active');
+    renderMenu(e.target.dataset.tab);
+  }
+});
+
+window.addEventListener('scroll',()=>{
+  const nav = document.getElementById('navbar');
+  if(window.scrollY>60) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
+
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('visible')});
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+
+document.getElementById('hamburger').addEventListener('click',()=>{
+  document.getElementById('mobileMenu').classList.add('open');
+});
+document.getElementById('menuClose').addEventListener('click',closeMobile);
+function closeMobile(){document.getElementById('mobileMenu').classList.remove('open')}
+
+function handleReservation(){
+  alert('✅ Reservation request noted! In a live environment this would submit to your booking system or TheFork. For now, call us at +31 297 297 015 or book via the TheFork link.');
+}
+
+renderMenu('starters');
+renderReviews();
+</script>
+</body>
+</html>
